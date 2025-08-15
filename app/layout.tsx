@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/contexts/AuthContext";
-import ClientLayout from './client-layout';
+// import { AuthProvider } from "@/contexts/AuthContext"; // AuthProvider is now in ClientLayoutWrapper
+import ClientLayoutWrapper from './ClientLayoutWrapper';
 
 // These are loaded on the server
 const geistSans = Geist({
@@ -28,11 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <ClientLayout className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-            {children}
-          </ClientLayout>
-        </AuthProvider>
+        <ClientLayoutWrapper className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+          {children}
+        </ClientLayoutWrapper>
       </body>
     </html>
   );

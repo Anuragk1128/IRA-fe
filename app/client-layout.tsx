@@ -1,7 +1,7 @@
 "use client";
 
 import { Toaster } from 'react-hot-toast';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import dynamic from 'next/dynamic';
 
