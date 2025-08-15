@@ -65,7 +65,7 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
           isScrolled || isHovered || !isAtTop
-            ? "bg-white/90 backdrop-blur-md shadow-sm"
+            ? "bg-white/30 backdrop-blur-md shadow-sm"
             : "bg-transparent"
         } ${!isAtTop || isHovered || isScrolled ? 'opacity-100' : 'opacity-0'}`}
         style={{
