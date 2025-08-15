@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname, '.'),
+      '@/components': path.resolve(__dirname, 'components'),
+      '@/contexts': path.resolve(__dirname, 'contexts'),
+      '@/lib': path.resolve(__dirname, 'lib'),
+      '@/hooks': path.resolve(__dirname, 'hooks')
     };
     return config;
   },
