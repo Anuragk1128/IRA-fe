@@ -80,14 +80,14 @@ export default function Login() {
       // Redirect to home page
       router.push('/');
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
       
       // More specific error messages
       let errorMessage = 'Login failed. Please check your credentials and try again.';
-      if (error.message?.includes('network')) {
+      if (error instanceof Error && error.message?.includes('network')) {
         errorMessage = 'Network error. Please check your connection.';
-      } else if (error.message) {
+      } else if (error instanceof Error && error.message) {
         errorMessage = error.message;
       }
       

@@ -17,7 +17,7 @@ const AdminLoginPage = () => {
       console.log('AdminLoginPage: Redirecting to /admin');
       router.push('/admin');
     }
-  }, [isAdminAuthenticated, router]);
+  }, [isAdminAuthenticated, adminLoading, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

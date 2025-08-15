@@ -31,7 +31,7 @@ const AdminDashboardPage = () => {
           <ul>
             <li className="mb-2 pb-2 border-b border-gray-200">User John Doe registered.</li>
             <li className="mb-2 pb-2 border-b border-gray-200">Order #1234 placed by Jane Smith.</li>
-            <li className="mb-2 pb-2 border-b border-gray-200">Product "Laptop Pro" updated.</li>
+            <li className="mb-2 pb-2 border-b border-gray-200">Product &quot;Laptop Pro&quot; updated.</li>
             <li>Admin Alice approved a new product.</li>
           </ul>
         </div>

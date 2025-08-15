@@ -16,7 +16,7 @@ interface UserProfile {
   isPhoneVerified: boolean;
   address?: {
     country?: string;
-    [key: string]: any;
+    [key: string]: unknown; // Changed from any to unknown
   };
   createdAt: string;
   updatedAt: string | null;
@@ -70,11 +70,6 @@ export default function ProfilePage() {
 
     fetchProfile();
   }, [user, router]);
-
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return 'Never';
-    return new Date(dateString).toLocaleString();
-  };
 
   if (isLoading) {
     return (
