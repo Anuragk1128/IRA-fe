@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
 import { FiUser, FiLogOut, FiMenu, FiX } from "react-icons/fi";
 
 export default function Navbar() {
@@ -12,16 +11,13 @@ export default function Navbar() {
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  const router = useRouter();
-  const [lastScrollY, setLastScrollY] = useState(0);
-  
+
   // Set isClient to true after component mounts to avoid hydration issues
   useEffect(() => {
     setIsClient(true);
   }, []);
-  
+
   // Close menu when user logs out
   useEffect(() => {
     if (!user) {
@@ -41,19 +37,9 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
-  useEffect(() => {
-    const handleRouteChange = () => {
-      setIsMenuOpen(false);
-    };
-
-    // Listen for route changes in Next.js App Router
-    window.addEventListener('routeChangeStart', handleRouteChange);
-    return () => {
-      window.removeEventListener('routeChangeStart', handleRouteChange);
-    };
-  }, []);
-
+  // Removed useEffect for routeChangeStart as useRouter is no longer directly used in Navbar for this purpose.
+  // Mobile menu closing on route change is implicitly handled by Next.js Link or useRouter.push causing re-renders.
+  
   const handleLogout = () => {
     logout();
     setIsMenuOpen(false);

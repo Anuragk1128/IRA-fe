@@ -3,14 +3,14 @@
 import { Toaster } from 'react-hot-toast';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 
-const AuthProvider = dynamic(
-  () => import('@/contexts/AuthContext').then((mod) => mod.AuthProvider),
-  {
-    ssr: false
-  }
-);
+// const AuthProvider = dynamic(
+//   () => import('@/contexts/AuthContext').then((mod) => mod.AuthProvider),
+//   {
+//     ssr: false
+//   }
+// );
 
 export default function ClientLayout({
   children,

@@ -77,9 +77,9 @@ export default function Register() {
         router.push('/');
       }, 1500);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Registration error:', error);
-      toast.error(error.message || 'Registration failed. Please try again.');
+      toast.error(error instanceof Error ? error.message : 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

@@ -69,8 +69,11 @@ ChartContainer.displayName = "Chart"
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
-    ([_, config]) => config.theme || config.color
-  )
+    ([, itemConfig]) => {
+      const typedItemConfig = itemConfig as ChartConfig[string];
+      return typedItemConfig.theme || typedItemConfig.color;
+    }
+  );
 
   if (!colorConfig.length) {
     return null
@@ -81,14 +84,14 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
-            ([theme, prefix]) => `
+            ([themeKey, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-      itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+      (itemConfig as ChartConfig[string]).theme?.[themeKey as keyof typeof THEMES] ||
+      (itemConfig as ChartConfig[string]).color;
+    return color ? `  --color-${key}: ${color};` : null;
   })
   .join("\n")}
 }
@@ -97,21 +100,44 @@ ${colorConfig
           .join("\n"),
       }}
     />
-  )
-}
+  );
+};
 
-const ChartTooltip = RechartsPrimitive.Tooltip
+const ChartTooltip = RechartsPrimitive.Tooltip;
+
+type ChartTooltipContentProps = React.ComponentProps<"div"> & {
+  active?: boolean; // From TooltipProps
+  payload?: Array<{ // Define a more specific type for payload items
+    color?: string;
+    dataKey?: string | number;
+    fill?: string;
+    name?: string;
+    value?: number | string;
+    unit?: string;
+    payload?: { // Nested payload structure
+      fill?: string;
+      color?: string;
+      [key: string]: unknown;
+    };
+    // Add other properties that might exist on your payload items
+    [key: string]: unknown;
+  }>;
+  label?: string | number | React.ReactNode; // From TooltipProps
+  labelFormatter?: (value: string | number | React.ReactNode, payload: unknown[]) => React.ReactNode; // Changed any[] to unknown[]
+  formatter?: (value: unknown, name: string, entry: unknown, index: number, payload: unknown) => React.ReactNode; // Changed any to unknown
+
+
+  hideLabel?: boolean;
+  hideIndicator?: boolean;
+  indicator?: "line" | "dot" | "dashed"
+  nameKey?: string
+  labelKey?: string
+  labelClassName?: string; // Added labelClassName
+};
 
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-    React.ComponentProps<"div"> & {
-      hideLabel?: boolean
-      hideIndicator?: boolean
-      indicator?: "line" | "dot" | "dashed"
-      nameKey?: string
-      labelKey?: string
-    }
+  ChartTooltipContentProps
 >(
   (
     {
@@ -188,7 +214,7 @@ const ChartTooltipContent = React.forwardRef<
           {payload.map((item, index) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
-            const indicatorColor = color || item.payload.fill || item.color
+            const indicatorColor = color || item.payload?.fill || item.color // Added optional chaining
 
             return (
               <div
@@ -258,6 +284,16 @@ ChartTooltipContent.displayName = "ChartTooltip"
 
 const ChartLegend = RechartsPrimitive.Legend
 
+interface LegendPayloadItem {
+  value?: unknown; 
+  id?: unknown; 
+  type?: string; 
+  color?: string; 
+  payload?: unknown; 
+  dataKey?: string | number; 
+  name?: string; 
+}
+
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> &
@@ -285,13 +321,13 @@ const ChartLegendContent = React.forwardRef<
           className
         )}
       >
-        {payload.map((item) => {
+        {payload.map((item: LegendPayloadItem) => {
           const key = `${nameKey || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
 
           return (
             <div
-              key={item.value}
+              key={item.value as React.Key}
               className={cn(
                 "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground"
               )}
